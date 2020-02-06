@@ -55,7 +55,9 @@ print('                                                 value is bigger than 10 
 print('---------------------------------------------------------------------------------------------------------------')
 print('                                  OUTPUTS : RGB mean values                                                    ')
 print('---------------------------------------------------------------------------------------------------------------')
+
 t0= tm.clock()
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-ny", "--subdy", required=False, default='2', help="Number of x divisions (E.g. '-nx 5' will produce 5 subdivisions in y direction or height). Default value :2")
 ap.add_argument("-nx", "--subdx", required=False, default='2', help="Number of y divisions (E.g. '-ny 5' will produce 5 subdivisions in x direction or width). Default value :2")
@@ -63,7 +65,6 @@ ap.add_argument("-dt", "--dt", required=False, default='0', help="Low threshold 
 ap.add_argument("-bt", "--bt", required=False, default='255', help="High threshold brightness filter (between 0 and 255, close to 255 and lower, to exclude bright images). Default value:255")
 ap.add_argument("-dir", "--dirim", required=False, default=".", help="Path of input images. Default value: Current directory ")
 args = vars(ap.parse_args())
-
 
 warnings.filterwarnings('ignore')
 warnings.simplefilter('ignore')
@@ -89,7 +90,7 @@ for file in os.listdir(directory):
     if (filename.endswith(".tif")) or (filename.endswith(".jpg")) or (filename.endswith(".png")) or (filename.endswith(".gif")):#&(filename.startswith("SNAP")):
         os.mkdir(directory_in_str+"/split_"+dirstr+"_"+filename[:-3])
         contpic2=cv2.imread(directory_in_str+"/"+filename)
-        print(filename)
+        
         xs=np.shape(contpic2)[0]
         ys=np.shape(contpic2)[1]
 
@@ -103,7 +104,7 @@ for file in os.listdir(directory):
                 avgc = np.mean(subpic)
                 print(filename+" average RGB value: ",round(avgc,2),"+/-",round(np.std(subpic),2))
                 if (avgc < bt) & (avgc > dt):
-                    cv2.imwrite(directory_in_str+"/split_"+dirstr+"_"+filename[:-3]+"/"+filename[:-3]+"_"+str(k)+"_"+str(j)+".tif", contpic2[k*dh:(k+1)*dh,j*dw:(j+1)*dw])
+                    cv2.imwrite(directory_in_str+"/split_"+dirstr+"_"+filename[:-3]+"/"+filename[:-4]+"_"+str(k)+"_"+str(j)+".tif", contpic2[k*dh:(k+1)*dh,j*dw:(j+1)*dw])
 
 t1= tm.clock()
 print("************************************************************************************************************")
