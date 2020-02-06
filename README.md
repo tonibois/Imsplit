@@ -5,7 +5,7 @@ Python program to split images in separated outputs with optional exclusion filt
 **Accepted input formats:** *TIF, JPG, PNG, GIF*
 
 **Parameters**
-+ nx, ny : number of splitts per dymension (nx,ny)
++ nx, ny : number of splitts in x and y axis (Width and Height: nx,ny)
 + dt,bt : don't output images below or above RGB mean threshold
 
 **Usage examples**
