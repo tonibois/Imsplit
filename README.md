@@ -8,7 +8,7 @@ Python program to split images in separated outputs with optional exclusion filt
 **General usage:**
 + Imsplit.py [-h] [-ny SUBDY] [-nx SUBDX] [-dt DT] [-bt BT] [-dir DIRIM]
 
-**Optional Parameters**
+**Optional parameters**
 + nx, ny : number of splitts in x and y axis (Width and Height: nx,ny)
 + dt,bt  : don't output images below or above RGB mean threshold
 + dir    : Path of directory with input images
