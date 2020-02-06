@@ -56,8 +56,10 @@ print('-------------------------------------------------------------------------
 print('                                  OUTPUTS : RGB mean values                                                    ')
 print('---------------------------------------------------------------------------------------------------------------')
 
+# Start counting time seconds to evaluate total time spent by running the program
 t0= tm.clock()
 
+# Parsing optional arguments of the program  
 ap = argparse.ArgumentParser()
 ap.add_argument("-ny", "--subdy", required=False, default='2', help="Number of x divisions (E.g. '-nx 5' will produce 5 subdivisions in y direction or height). Default value :2")
 ap.add_argument("-nx", "--subdx", required=False, default='2', help="Number of y divisions (E.g. '-ny 5' will produce 5 subdivisions in x direction or width). Default value :2")
@@ -66,16 +68,7 @@ ap.add_argument("-bt", "--bt", required=False, default='255', help="High thresho
 ap.add_argument("-dir", "--dirim", required=False, default=".", help="Path of input images. Default value: Current directory ")
 args = vars(ap.parse_args())
 
-warnings.filterwarnings('ignore')
-warnings.simplefilter('ignore')
-
-now = datetime.now() 
-year = now.strftime("%Y")
-month = now.strftime("%m")
-day = now.strftime("%d")
-time = now.strftime("%H:%M:%S")
-date_time = now.strftime("%Y%m%d_%H%M%S")
-
+# Assign args to program variables
 directory_in_str=args["dirim"]
 subdx=int(args["subdy"])
 subdy=int(args["subdx"])
@@ -83,26 +76,41 @@ dt=int(args["dt"])
 bt=int(args["bt"])
 directory = os.fsencode(directory_in_str)
 
+# Ignore warning messages
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+
+# Create string with date and time to be used as label folders
+now = datetime.now() 
+year = now.strftime("%Y")
+month = now.strftime("%m")
+day = now.strftime("%d")
+time = now.strftime("%H:%M:%S")
+date_time = now.strftime("%Y%m%d_%H%M%S")
+
 # Loop for all images inside current directory
 for file in os.listdir(directory):
     filename = os.fsdecode(file)
     dirstr=str(date_time)
     if (filename.endswith(".tif")) or (filename.endswith(".jpg")) or (filename.endswith(".png")) or (filename.endswith(".gif")):#&(filename.startswith("SNAP")):
+# Create a folder for each image input        
         os.mkdir(directory_in_str+"/split_"+dirstr+"_"+filename[:-3])
         contpic2=cv2.imread(directory_in_str+"/"+filename)
-        
+# Compute image dymensions        
         xs=np.shape(contpic2)[0]
         ys=np.shape(contpic2)[1]
-
+# definition of subdivision steps for each dymension (height, width) 
         dh=int(xs/subdx)
         dw=int(ys/subdy)
-
+        
+# Make the splits, filter and label
         for k in range(0,subdx,1):
             for j in range(0,subdy,1):
                 subpic=contpic2[k*dh:(k+1)*dh,j*dw:(j+1)*dw]
                 # Exclude pictures with low portion of tissue
                 avgc = np.mean(subpic)
                 print(filename+" average RGB value: ",round(avgc,2),"+/-",round(np.std(subpic),2))
+# Here the filter to output images between RGB mean values in bt-dt range                
                 if (avgc < bt) & (avgc > dt):
                     cv2.imwrite(directory_in_str+"/split_"+dirstr+"_"+filename[:-3]+"/"+filename[:-4]+"_"+str(k)+"_"+str(j)+".tif", contpic2[k*dh:(k+1)*dh,j*dw:(j+1)*dw])
 
